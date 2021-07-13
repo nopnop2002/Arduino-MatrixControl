@@ -47,6 +47,16 @@ The library can be installed using the [standard Arduino library install procedu
 # Wiring
 See source code.
 
+# Examples
+- MatrixControl_Basic   
+ For Basic Test. For compatibility verification.   
+- LedControl-Scroll-FullSpeed   
+ Full speed scrolling with the LedControl library. For speed comparison.   
+- MatrixControl-Scroll-FullSpeed   
+ Full speed scrolling with the MatrixControl library. For speed comparison.   
+- MatrixControl-Scroll-Interval   
+ Practical scrolling with the MatrixControl library.   
+
 # Normal display
 ![IMG_1776](https://user-images.githubusercontent.com/6020549/125252563-79b9f780-e333-11eb-907a-43768da36622.JPG)
 ![IMG_1777](https://user-images.githubusercontent.com/6020549/125252568-7b83bb00-e333-11eb-965e-a5890266aa68.JPG)
