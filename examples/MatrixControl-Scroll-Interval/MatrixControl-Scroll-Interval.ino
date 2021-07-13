@@ -14,7 +14,8 @@
 
 #define numDevices 4
 
-#define interval 50;
+//#define interval 50;
+#define interval 20;
 
 #if defined(__AVR__)
 /*
