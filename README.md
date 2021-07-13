@@ -17,24 +17,28 @@ The original library used software SPI, but this library can use both software S
 - Software SPI(Default)   
 ```#define BITBANG 1```
 
-- Hardware SPI
+- Hardware SPI   
 ```#define BITBANG 0```
 
 
 ## Processing time using LedControl-Scroll-FullSpeed
+```
 diffMillis[LedControl]=1973[ms]
 diffMillis[LedControl]=1973[ms]
 diffMillis[LedControl]=25565[ms]
 diffMillis[LedControl]=25574[ms]
+```
 
 ## Processing time using MatrixControl-Scroll-FullSpeed
+```
 diffMillis[MatrixControl]=293[ms]
 diffMillis[MatrixControl]=292[ms]
 diffMillis[MatrixControl]=1093[ms]
 diffMillis[MatrixControl]=1094[ms]
+```
 
 # Documentation
-Documentation for the library is on the [Github Project Pages](http://wayoda.github.io/MatrixControl/)
+Documentation for the library is on the [Github Project Pages](http://wayoda.github.io/LedControl/)
 
 # Install
 The library can be installed using the [standard Arduino library install procedure](http://arduino.cc/en/Guide/Libraries)  
