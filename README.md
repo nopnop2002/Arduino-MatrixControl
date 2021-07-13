@@ -21,7 +21,7 @@ The original library used software SPI, but this library can use both software S
 ```#define BITBANG 0```
 
 
-## Processing time using LedControl-Scroll-FullSpeed
+## Processing time using LedControl-Scroll-FullSpeed   
 ```
 diffMillis[LedControl]=1973[ms]
 diffMillis[LedControl]=1973[ms]
@@ -29,7 +29,8 @@ diffMillis[LedControl]=25565[ms]
 diffMillis[LedControl]=25574[ms]
 ```
 
-## Processing time using MatrixControl-Scroll-FullSpeed
+## Processing time using MatrixControl-Scroll-FullSpeed   
+It's up to 23 times faster.   
 ```
 diffMillis[MatrixControl]=293[ms]
 diffMillis[MatrixControl]=292[ms]
