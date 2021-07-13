@@ -38,10 +38,11 @@ diffMillis[MatrixControl]=1094[ms]
 ```
 
 # Documentation
-Documentation for the library is on the [Github Project Pages](http://wayoda.github.io/LedControl/)
+Documentation for the library is on the [Github Project Pages](http://wayoda.github.io/LedControl/).   
+__This library is compatible with the original library.__   
 
 # Install
-The library can be installed using the [standard Arduino library install procedure](http://arduino.cc/en/Guide/Libraries)  
+The library can be installed using the [standard Arduino library install procedure](http://arduino.cc/en/Guide/Libraries).  
 
 # Wiring
 See source code.
