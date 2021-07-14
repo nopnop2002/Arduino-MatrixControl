@@ -63,7 +63,7 @@ void setup() {
   lc.setLed(3, 0, 3, 1);
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[true]=");
+  Serial.print("diffMillis[LedControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
@@ -88,7 +88,7 @@ void setup() {
   lc.pushRow(3, 0);
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[false]=");
+  Serial.print("diffMillis[MaxrixControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
@@ -105,7 +105,7 @@ void setup() {
   }
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[true]=");
+  Serial.print("diffMillis[LedControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
@@ -122,7 +122,7 @@ void setup() {
   lc.pushAll();
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[false]=");
+  Serial.print("diffMillis[MaxrixControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
@@ -135,7 +135,7 @@ void setup() {
   lc.setColumn(3, 0, 0x0f);
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[true]=");
+  Serial.print("diffMillis[LedControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
@@ -149,7 +149,7 @@ void setup() {
   lc.pushAll();
   endMillis = millis();
   diffMillis = endMillis - startMillis;
-  Serial.print("diffMillis[false]=");
+  Serial.print("diffMillis[MaxrixControl]=");
   Serial.print(diffMillis);
   Serial.println("[ms]");
   delay(1000);
