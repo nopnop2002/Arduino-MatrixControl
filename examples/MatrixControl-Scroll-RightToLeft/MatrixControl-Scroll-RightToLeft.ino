@@ -197,7 +197,7 @@ void rotateBitmap(uint8_t *bmp, uint16_t w, uint16_t h, uint8_t mode) {
 //  row:     表示する列番号(-7から31)
 //  maxDev:  接続されている最大デバイス数
 //  invert:  反転するかどうか
-int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert, bool direction=LEFTRIGHT) {
+int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert, bool direction=RIGHTLEFT) {
   int addr = ((row+8) / 8) - 1;
   int start = 0;
   int width = 8 - ((row+8) % 8);
@@ -211,7 +211,11 @@ int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert, b
 
 #if 0
   Serial.print("direction=");
-  Serial.print(direction);
+  if (direction) {
+    Serial.print("RIGHTLEFT");
+  } else{
+    Serial.print("LEFTRIGHT");
+  }
   Serial.print(" row=");
   Serial.print(row);
   Serial.print(" invert=");
@@ -265,7 +269,7 @@ int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert, b
     lc.setColumn(addr,i,_bitmap[i], false);
   }
 
-  if (direction == LEFTRIGHT) {
+  if (direction == RIGHTLEFT) {
 
     // 同じアドレスの右側の１列をクリア
     if (row < 0) {
