@@ -187,13 +187,17 @@ void rotateBitmap(uint8_t *bmp, uint16_t w, uint16_t h, uint8_t mode) {
   memcpy(bmp,tmpbmp,h*bl);
 }
 
+#define RIGHTLEFT true
+#define LEFTRIGHT false
+
+#if 1
 // ビットマップを指定の列に表示
 //  bitmap:  表示対象バッファ
 //  mapside: バッファの大きさ(バイト)
 //  row:     表示する列番号(-7から31)
 //  maxDev:  接続されている最大デバイス数
 //  invert:  反転するかどうか
-int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert) {
+int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert, bool direction=LEFTRIGHT) {
   int addr = ((row+8) / 8) - 1;
   int start = 0;
   int width = 8 - ((row+8) % 8);
@@ -206,7 +210,9 @@ int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert) {
   }
 
 #if 0
-  Serial.print("row=");
+  Serial.print("direction=");
+  Serial.print(direction);
+  Serial.print(" row=");
   Serial.print(row);
   Serial.print(" invert=");
   Serial.print(invert);
@@ -259,45 +265,101 @@ int showBitmap(uint8_t *bitmap, int mapsize, int row, int maxDev, bool invert) {
     lc.setColumn(addr,i,_bitmap[i], false);
   }
 
-  //右側の１列をクリア
-  if (row < 0) {
-    lc.setColumn(addr,start-1,0, false);
-    return addr;
-  }
+  if (direction == LEFTRIGHT) {
 
+    // 同じアドレスの右側の１列をクリア
+    if (row < 0) {
+      lc.setColumn(addr,start-1,0, false);
+      return addr;
+    }
   
-  // 右側のデバイスへの表示
-  int addrRight = addr + 1;
-  if (addrRight >= maxDev) return addr;
-
-  // 右側のデバイスの１列をクリア
-  lc.setColumn(addrRight, width-1, 0, false);
-
-  // 右側のデバイスに対する描画はなし
-  if (width == 8) return addr;
-
-  for(int i=0;i<mapsize;i++) {
-    _bitmap[i] = bitmap[i];
-    if (invert) _bitmap[i] = ~bitmap[i];
-  }
-  //下方向にスクロール
-  for (int i=0;i<width;i++) {
-    scrollBitmap(_bitmap, 8, 8, B1000);
-  }
-
-  for(int i=width;i<8;i++) {
+    
+    // 右側のデバイスへの表示
+    int addrRight = addr + 1;
+    if (addrRight >= maxDev) return addr;
+  
+    // 右側のデバイスの１列をクリア
+    lc.setColumn(addrRight, width-1, 0, false);
+  
+    // 右側のデバイスに対する描画はなし
+    if (width == 8) return addr;
+  
+    for(int i=0;i<mapsize;i++) {
+      _bitmap[i] = bitmap[i];
+      if (invert) _bitmap[i] = ~bitmap[i];
+    }
+    //下方向にスクロール
+    for (int i=0;i<width;i++) {
+      scrollBitmap(_bitmap, 8, 8, B1000);
+    }
+  
+    for(int i=width;i<8;i++) {
 #if 0
-    Serial.print("setColumn2 addrRight=");
-    Serial.print(addrRight);
-    Serial.print(" col=");
-    Serial.print(i);
-    Serial.println();
+      Serial.print("setColumn2 addrRight=");
+      Serial.print(addrRight);
+      Serial.print(" col=");
+      Serial.print(i);
+      Serial.println();
 #endif
-    lc.setColumn(addrRight,i,_bitmap[i], false);
-  }
- 
-  return addr;
+      lc.setColumn(addrRight,i,_bitmap[i], false);
+    }
+   
+    return addr;
+    
+  } else {
+
+    //左側の１列をクリア
+    if (row > 0) {
+      int _addr = addr;
+      int _col = width;
+      if (width == 8) {
+        _addr = addr-1;
+        _col = 0;
+      }
+#if 0
+      Serial.print("_addr=");
+      Serial.print(_addr);
+      Serial.print(" _col=");
+      Serial.print(_col);
+      Serial.println();
+#endif
+      lc.setColumn(_addr, _col, 0, false);
+    }
+
+    // 右側のデバイスへの表示
+    int addrRight = addr + 1;
+    if (addrRight >= maxDev) return addr;
+  
+    // 右側のデバイスに対する描画はなし
+    if (width == 8) return addr;
+  
+    for(int i=0;i<mapsize;i++) {
+      _bitmap[i] = bitmap[i];
+      if (invert) _bitmap[i] = ~bitmap[i];
+    }
+    //下方向にスクロール
+    for (int i=0;i<width;i++) {
+      scrollBitmap(_bitmap, 8, 8, B1000);
+    }
+  
+    for(int i=width;i<8;i++) {
+#if 0
+      Serial.print("setColumn2 addrRight=");
+      Serial.print(addrRight);
+      Serial.print(" col=");
+      Serial.print(i);
+      Serial.println();
+#endif
+      lc.setColumn(addrRight,i,_bitmap[i], false);
+    }
+
+   
+    return addr;
+      
+  } // end LEFTRIGHT
+
 }
+#endif
 
 void getBitmap(byte * bitmap, int code) {
   memcpy(bitmap, font8x8_basic[code], 8);
@@ -370,7 +432,6 @@ void setup() {
     lc.pushAll();
     endMillis = millis();
     diffMillis = endMillis - startMillis;
-    //Serial.println(diffMillis);
     if (addr < 0) break;
     startRow--;
     delayMillis = interval - diffMillis;
@@ -393,21 +454,12 @@ void setup() {
 
 #if 1
   startRow = (numDevices * 8) - 1;
-  //startRow = 8;
   while(1) {
     startMillis = millis();
-#if 0
-    showBitmap(bitmap[0], 8, startRow, numDevices, false);
-    showBitmap(bitmap[1], 8, startRow+(8*1), numDevices, false);
-    showBitmap(bitmap[2], 8, startRow+(8*2), numDevices, false);
-    showBitmap(bitmap[3], 8, startRow+(8*3), numDevices, false);
-    addr = showBitmap(bitmap[4], 8, startRow+(8*4), numDevices, false);
-#else
     for(int index=0;index<numDevices;index++) {
       showBitmap(bitmap[index], 8, startRow+(8*index), numDevices, false);
     }
     addr = showBitmap(bitmap[numDevices], 8, startRow+(8*numDevices), numDevices, false);
-#endif
     lc.pushAll();
     endMillis = millis();
     diffMillis = endMillis - startMillis;
@@ -417,22 +469,11 @@ void setup() {
     if (addr < 0) break;
     startRow--;
     if (startRow == -8 && stringPos < stringLen) {
-#if 0
-      memcpy(bitmap[0], bitmap[1], 8);
-      memcpy(bitmap[1], bitmap[2], 8);
-      memcpy(bitmap[2], bitmap[3], 8);
-      memcpy(bitmap[3], bitmap[4], 8);
-      //Serial.print("stringPos=");
-      //Serial.println(stringPos);
-      char ch = string[stringPos++];
-      getBitmap(bitmap[4], ch);
-#else
       for(int index=0;index<numDevices;index++) {
         memcpy(bitmap[index], bitmap[index+1], 8);
       }
       char ch = string[stringPos++];
       getBitmap(bitmap[numDevices], ch);
-#endif
       startRow = 0;
     }
     delayMillis = interval - diffMillis;
@@ -449,30 +490,26 @@ void setup() {
   }
 
   startRow = (numDevices * 8) - 1;
-  //startRow = 8;
   while(1) {
     startMillis = millis();
-    showBitmap(bitmap[0], 8, startRow, numDevices, true);
-    showBitmap(bitmap[1], 8, startRow+(8*1), numDevices, true);
-    showBitmap(bitmap[2], 8, startRow+(8*2), numDevices, true);
-    showBitmap(bitmap[3], 8, startRow+(8*3), numDevices, true);
-    addr = showBitmap(bitmap[4], 8, startRow+(8*4), numDevices, true);
+    for(int index=0;index<numDevices;index++) {
+      showBitmap(bitmap[index], 8, startRow+(8*index), numDevices, true);
+    }
+    addr = showBitmap(bitmap[numDevices], 8, startRow+(8*numDevices), numDevices, true);
     lc.pushAll();
     endMillis = millis();
     diffMillis = endMillis - startMillis;
+    //Serial.println(diffMillis);
     //Serial.print("addr=");
     //Serial.println(addr);
     if (addr < 0) break;
     startRow--;
     if (startRow == -8 && stringPos < stringLen) {
-      memcpy(bitmap[0], bitmap[1], 8);
-      memcpy(bitmap[1], bitmap[2], 8);
-      memcpy(bitmap[2], bitmap[3], 8);
-      memcpy(bitmap[3], bitmap[4], 8);
-      //Serial.print("stringPos=");
-      //Serial.println(stringPos);
+      for(int index=0;index<numDevices;index++) {
+        memcpy(bitmap[index], bitmap[index+1], 8);
+      }
       char ch = string[stringPos++];
-      getBitmap(bitmap[4], ch);
+      getBitmap(bitmap[numDevices], ch);
       startRow = 0;
     }
     delayMillis = interval - diffMillis;

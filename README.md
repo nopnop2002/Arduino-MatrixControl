@@ -55,8 +55,10 @@ See source code.
  Full speed scrolling with the LedControl library. For speed comparison.   
 - MatrixControl-Scroll-FullSpeed   
  Full speed scrolling with the MatrixControl library. For speed comparison. __It ends in an instant.__   
-- MatrixControl-Scroll-Interval   
- Practical scrolling with the MatrixControl library.   
+- MatrixControl-Scroll-RightToLeft   
+ Scroll from left to right using the MatrixControl library.
+- MatrixControl-Scroll-LeftToRight   
+ Scroll from right to left using the MatrixControl library.
 
 # Normal display
 ![IMG_1776](https://user-images.githubusercontent.com/6020549/125252563-79b9f780-e333-11eb-907a-43768da36622.JPG)
