@@ -56,6 +56,8 @@ See source code.
 - MatrixControl-Scroll-FullSpeed   
  Full speed scrolling with the MatrixControl library. For speed comparison. __It ends in an instant.__   
 - MatrixControl-Scroll-RightToLeft   
+ Scroll from right to left using the MatrixControl library.
+- MatrixControl-Scroll-LeftToRight   
  Scroll from left to right using the MatrixControl library.
 
 # Normal display
